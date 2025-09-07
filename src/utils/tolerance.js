@@ -62,7 +62,7 @@ export function snapToTolerance(uvoxid, sigChars) {
 
 // --- Example (manual run) ---
 if (import.meta.url === `file://${process.argv[1]}`) {
-  import("./../core.js").then(({ encodeUvoxid }) => {
+  import("../uvoxid.js").then(({ encodeUvoxid }) => {
     const EARTH_RADIUS_UM = 6_371_000_000_000n;
 
     const uv1 = encodeUvoxid(

@@ -6,7 +6,7 @@
  * to compute surface areas on spheres and planar patches.
  */
 
-import { decodeUvoxid } from "../core.js";
+import { decodeUvoxid } from "../uvoxid.js";
 
 /**
  * Compute the area (in m²) of a spherical quadrilateral patch on a sphere

@@ -1,9 +1,10 @@
-const { encodeUvoxid, decodeUvoxid } = require('../src/uvoxid');
+import { encodeUvoxid, decodeUvoxid } from "../src/index.js";
 
-test('round trip encode/decode', () => {
-  const encoded = encodeUvoxid(6371000000000, 0, 0);
-  const decoded = decodeUvoxid(encoded);
-  expect(decoded.r_um).toBe(6371000000000);
-  expect(decoded.lat_microdeg).toBe(0);
-  expect(decoded.lon_microdeg).toBe(0);
+test("round trip encode/decode", () => {
+  const encoded = encodeUvoxid(6371000000000n, 0n, 0n);
+  const [r, lat, lon] = decodeUvoxid(encoded);
+
+  expect(r).toBe(6371000000000);
+  expect(lat).toBe(0);
+  expect(lon).toBe(0);
 });

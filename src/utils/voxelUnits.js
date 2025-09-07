@@ -1,4 +1,4 @@
-// voxelUnits.js
+// src/utils/voxelUnits.js
 
 const VOXEL_SIZE_M = 1e-6; // 1 µm
 
@@ -14,7 +14,10 @@ const UNIT_TO_METERS = {
   mi: 1609.34,
 };
 
-function toVoxels(value, unit) {
+/**
+ * Convert a value in a given unit → number of voxels (1 µm each).
+ */
+export function toVoxels(value, unit) {
   unit = unit.toLowerCase();
   if (!(unit in UNIT_TO_METERS)) {
     throw new Error(`Unsupported unit: ${unit}`);
@@ -23,7 +26,10 @@ function toVoxels(value, unit) {
   return Math.round(meters / VOXEL_SIZE_M);
 }
 
-function fromVoxels(voxels, unit) {
+/**
+ * Convert a voxel count → value in the requested unit.
+ */
+export function fromVoxels(voxels, unit) {
   unit = unit.toLowerCase();
   if (!(unit in UNIT_TO_METERS)) {
     throw new Error(`Unsupported unit: ${unit}`);
@@ -31,5 +37,3 @@ function fromVoxels(voxels, unit) {
   const meters = voxels * VOXEL_SIZE_M;
   return meters / UNIT_TO_METERS[unit];
 }
-
-module.exports = { toVoxels, fromVoxels };

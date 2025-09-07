@@ -1,13 +1,16 @@
+// src/uvoxid.js
+
 // Encode spherical coordinates into 192-bit UVoxID using BigInt
-function encodeUvoxid(r_um, lat_microdeg, lon_microdeg) {
-  const lat_enc = BigInt(lat_microdeg + 90_000_000);
-  const lon_enc = BigInt(lon_microdeg + 180_000_000);
+// src/uvoxid.js
+export function encodeUvoxid(r_um, lat_microdeg, lon_microdeg) {
+  const lat_enc = BigInt(lat_microdeg) + 90_000_000n;
+  const lon_enc = BigInt(lon_microdeg) + 180_000_000n;
   const r_enc   = BigInt(r_um);
 
   return (r_enc << 128n) | (lat_enc << 64n) | lon_enc;
 }
 
-function decodeUvoxid(uvoxid) {
+export function decodeUvoxid(uvoxid) {
   const mask64 = (1n << 64n) - 1n;
 
   const lon_enc = uvoxid & mask64;
@@ -17,7 +20,5 @@ function decodeUvoxid(uvoxid) {
   const lat_microdeg = Number(lat_enc) - 90_000_000;
   const lon_microdeg = Number(lon_enc) - 180_000_000;
 
-  return { r_um: Number(r_um), lat_microdeg, lon_microdeg };
+  return [Number(r_um), lat_microdeg, lon_microdeg];
 }
-
-module.exports = { encodeUvoxid, decodeUvoxid };
