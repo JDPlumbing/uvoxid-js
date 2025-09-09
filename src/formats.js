@@ -50,7 +50,7 @@ export function uvoxidToBase32(uvoxid) {
   let parts = [];
   for (let i = 0; i < 24; i += 8) {
     let chunk = buf.slice(i, i + 8);
-    let enc = base32.encode(chunk).replace(/=+$/, ""); // strip padding
+    let enc = base32.encode(new Uint8Array(chunk)).replace(/=+$/, ""); // strip padding
     parts.push(enc);
   }
   return "uvoxid:" + parts.join("-");
