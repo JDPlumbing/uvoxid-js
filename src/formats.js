@@ -1,6 +1,13 @@
 // src/formats.js
-import base32 from "hi-base32";
-const { encode: base32Encode, decode: base32Decode } = base32;
+// Safe wrapper for hi-base32 to work in both Node (CJS) and Vite/browser (ESM)
+import * as base32Lib from "hi-base32";
+
+const base32 = {
+  encode: base32Lib.encode || (base32Lib.default && base32Lib.default.encode),
+  decode: (base32Lib.decode && base32Lib.decode.asBytes)
+    ? base32Lib.decode
+    : (base32Lib.default ? base32Lib.default.decode : undefined),
+};
 
 // --- Helpers ---
 function hexToBytes(hex) {
@@ -13,7 +20,7 @@ function hexToBytes(hex) {
 
 function bytesToHex(buf) {
   return Array.from(buf)
-    .map(b => b.toString(16).padStart(2, "0"))
+    .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
 
@@ -21,7 +28,7 @@ function bytesToHex(buf) {
 export function uvoxidToBin(uvoxid) {
   console.log("uvoxidToBin called with:", uvoxid);
   let hex = uvoxid.toString(16).padStart(48, "0");
-  return hexToBytes(hex);
+  return hexToBytes(hex); // Uint8Array (24 bytes)
 }
 
 export function binToUvoxid(buf) {
@@ -51,7 +58,7 @@ export function uvoxidToBase32(uvoxid) {
   let parts = [];
   for (let i = 0; i < 24; i += 8) {
     let chunk = buf.slice(i, i + 8);
-    let enc = base32Encode(chunk).replace(/=+$/, "");
+    let enc = base32.encode(new Uint8Array(chunk)).replace(/=+$/, "");
     parts.push(enc);
   }
   return "uvoxid:" + parts.join("-");
@@ -60,7 +67,10 @@ export function uvoxidToBase32(uvoxid) {
 export function base32ToUvoxid(str) {
   console.log("base32ToUvoxid called with:", str);
   let clean = str.replace(/^uvoxid:/, "").replace(/-/g, "");
-  let bytes = base32Decode.asBytes(clean.toUpperCase());
+  if (!base32.decode || !base32.decode.asBytes) {
+    throw new Error("base32.decode.asBytes not available — check hi-base32 import");
+  }
+  let bytes = base32.decode.asBytes(clean.toUpperCase());
   return binToUvoxid(new Uint8Array(bytes));
 }
 
@@ -68,12 +78,15 @@ export function base32ToUvoxid(str) {
 export function uvoxidToBase32Flat(uvoxid) {
   console.log("uvoxidToBase32Flat called with:", uvoxid);
   let buf = uvoxidToBin(uvoxid);
-  return base32Encode(buf).replace(/=+$/, "");
+  return base32.encode(buf).replace(/=+$/, "");
 }
 
 export function base32FlatToUvoxid(str) {
   console.log("base32FlatToUvoxid called with:", str);
-  let bytes = base32Decode.asBytes(str.toUpperCase());
+  if (!base32.decode || !base32.decode.asBytes) {
+    throw new Error("base32.decode.asBytes not available — check hi-base32 import");
+  }
+  let bytes = base32.decode.asBytes(str.toUpperCase());
   return binToUvoxid(new Uint8Array(bytes));
 }
 
