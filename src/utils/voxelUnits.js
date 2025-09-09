@@ -18,6 +18,7 @@ const UNIT_TO_METERS = {
  * Convert a value in a given unit → number of voxels (1 µm each).
  */
 export function toVoxels(value, unit) {
+  console.log("toVoxels called with:", value, unit);
   unit = unit.toLowerCase();
   if (!(unit in UNIT_TO_METERS)) {
     throw new Error(`Unsupported unit: ${unit}`);
@@ -30,6 +31,7 @@ export function toVoxels(value, unit) {
  * Convert a voxel count → value in the requested unit.
  */
 export function fromVoxels(voxels, unit) {
+  console.log("fromVoxels called with:", voxels, unit);
   unit = unit.toLowerCase();
   if (!(unit in UNIT_TO_METERS)) {
     throw new Error(`Unsupported unit: ${unit}`);

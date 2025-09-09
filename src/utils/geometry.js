@@ -12,6 +12,7 @@ export const VOXEL_VOLUME_M3 = VOXEL_SIZE_M ** 3; // ~1e-18 m³
  * @returns {number}
  */
 export function voxelVolumeM3() {
+  console.log("voxelVolumeM3 called");
   return VOXEL_VOLUME_M3;
 }
 
@@ -21,6 +22,7 @@ export function voxelVolumeM3() {
  * @returns {number} number of voxels
  */
 export function cubeVoxels(sideM) {
+  console.log("cubeVoxels called with:", sideM);
   return Math.floor((sideM / VOXEL_SIZE_M) ** 3);
 }
 
@@ -30,6 +32,7 @@ export function cubeVoxels(sideM) {
  * @returns {number} number of voxels
  */
 export function sphereVoxels(radiusM) {
+  console.log("sphereVoxels called with:", radiusM);
   const volumeM3 = (4 / 3) * Math.PI * radiusM ** 3;
   return Math.floor(volumeM3 / VOXEL_VOLUME_M3);
 }
@@ -41,6 +44,7 @@ export function sphereVoxels(radiusM) {
  * @returns {number} number of voxels
  */
 export function cylinderVoxels(radiusM, heightM) {
+  console.log("cylinderVoxels called with:", radiusM, heightM);
   const volumeM3 = Math.PI * radiusM ** 2 * heightM;
   return Math.floor(volumeM3 / VOXEL_VOLUME_M3);
 }

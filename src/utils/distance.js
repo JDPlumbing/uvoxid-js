@@ -1,9 +1,10 @@
-import { decodeUvoxid } from "../uvoxid.js";
+import { decodeUvoxid } from "../index.js";
 
 const VOXEL_SIZE_M = 1e-6; // 1 µm
 
 /** Straight-line (chord) distance between two voxels in meters. */
 export function linearDistance(voxid1, voxid2) {
+  console.log("linearDistance called with:", voxid1, voxid2);
   const [r1, lat1Micro, lon1Micro] = decodeUvoxid(voxid1);
   const [r2, lat2Micro, lon2Micro] = decodeUvoxid(voxid2);
 
@@ -25,6 +26,7 @@ export function linearDistance(voxid1, voxid2) {
 
 /** Great-circle (surface) distance in meters. */
 export function haversineDistance(voxid1, voxid2) {
+  console.log("haversineDistance called with:", voxid1, voxid2);
   const [r1, lat1Micro, lon1Micro] = decodeUvoxid(voxid1);
   const [r2, lat2Micro, lon2Micro] = decodeUvoxid(voxid2);
 

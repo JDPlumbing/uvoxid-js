@@ -20,6 +20,7 @@ const BITS_PER_CHAR = 5;
  * @returns {bigint} truncated UVoxID integer with lower bits zeroed out
  */
 export function truncateToTolerance(uvoxid, sigChars) {
+  console.log("truncateToTolerance called with:", uvoxid, sigChars);
   const keepBits = sigChars * BITS_PER_CHAR;
   if (keepBits > TOTAL_BITS) {
     throw new Error(
@@ -28,7 +29,7 @@ export function truncateToTolerance(uvoxid, sigChars) {
   }
 
   const mask =
-    (1n << BigInt(keepBits)) - 1n << BigInt(TOTAL_BITS - keepBits);
+    ((1n << BigInt(keepBits)) - 1n) << BigInt(TOTAL_BITS - keepBits);
   return BigInt(uvoxid) & mask;
 }
 
@@ -41,6 +42,7 @@ export function truncateToTolerance(uvoxid, sigChars) {
  * @returns {boolean}
  */
 export function equalWithinTolerance(a, b, sigChars) {
+  console.log("equalWithinTolerance called with:", a, b, sigChars);
   return (
     truncateToTolerance(a, sigChars) === truncateToTolerance(b, sigChars)
   );
@@ -54,34 +56,41 @@ export function equalWithinTolerance(a, b, sigChars) {
  * @returns {string} truncated Base32 string with padding 'A's
  */
 export function snapToTolerance(uvoxid, sigChars) {
+  console.log("snapToTolerance called with:", uvoxid, sigChars);
   const truncated = truncateToTolerance(uvoxid, sigChars);
   const b32 = uvoxidToB32(truncated);
   const prefix = b32.replace("uvoxid:", "").replace(/-/g, "").slice(0, sigChars);
   return `uvoxid:${prefix}${"A".repeat(39 - sigChars)}`;
 }
 
-// --- Example (manual run) ---
-if (import.meta.url === `file://${process.argv[1]}`) {
-  import("../uvoxid.js").then(({ encodeUvoxid }) => {
-    const EARTH_RADIUS_UM = 6_371_000_000_000n;
+// --- Example (manual run with Node only) ---
+// if (
+//   typeof process !== "undefined" &&
+//   typeof process.argv !== "undefined" &&
+//   import.meta.url.startsWith("file://") &&
+//   process.argv[1] &&
+//   import.meta.url === `file://${process.argv[1]}`
+// ) {
+//   import("../uvoxid.js").then(({ encodeUvoxid }) => {
+//     const EARTH_RADIUS_UM = 6_371_000_000_000n;
 
-    const uv1 = encodeUvoxid(
-      EARTH_RADIUS_UM,
-      BigInt(Math.floor(25.76 * 1e6)),
-      BigInt(Math.floor(-80.19 * 1e6))
-    );
-    const uv2 = encodeUvoxid(
-      EARTH_RADIUS_UM,
-      BigInt(Math.floor(25.760001 * 1e6)),
-      BigInt(Math.floor(-80.190001 * 1e6))
-    );
+//     const uv1 = encodeUvoxid(
+//       EARTH_RADIUS_UM,
+//       BigInt(Math.floor(25.76 * 1e6)),
+//       BigInt(Math.floor(-80.19 * 1e6))
+//     );
+//     const uv2 = encodeUvoxid(
+//       EARTH_RADIUS_UM,
+//       BigInt(Math.floor(25.760001 * 1e6)),
+//       BigInt(Math.floor(-80.190001 * 1e6))
+//     );
 
-    console.log("Exact equal:", uv1 === uv2);
-    console.log(
-      "Equal at 6 sig chars (~mm scale):",
-      equalWithinTolerance(uv1, uv2, 6)
-    );
-    console.log("Snapped uv1 @ 6 chars:", snapToTolerance(uv1, 6));
-    console.log("Snapped uv2 @ 6 chars:", snapToTolerance(uv2, 6));
-  });
-}
+//     console.log("Exact equal:", uv1 === uv2);
+//     console.log(
+//       "Equal at 6 sig chars (~mm scale):",
+//       equalWithinTolerance(uv1, uv2, 6)
+//     );
+//     console.log("Snapped uv1 @ 6 chars:", snapToTolerance(uv1, 6));
+//     console.log("Snapped uv2 @ 6 chars:", snapToTolerance(uv2, 6));
+//   });
+// }

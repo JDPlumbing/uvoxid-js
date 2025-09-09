@@ -9,6 +9,7 @@ export const R_POL_UM = 6_356_752_000_000; // polar radius in µm
  * Uses ellipsoid formula for an oblate spheroid (WGS84).
  */
 export function earthRadiusAtLat(latMicrodeg) {
+  console.log("earthRadiusAtLat called with:", latMicrodeg);
   const latRad = (latMicrodeg / 1e6) * (Math.PI / 180);
   const cosPhi = Math.cos(latRad);
   const sinPhi = Math.sin(latRad);
@@ -29,6 +30,7 @@ export function earthRadiusAtLat(latMicrodeg) {
  * Currently always returns 0.
  */
 export function terrainOffset(latMicrodeg, lonMicrodeg) {
+  console.log("terrainOffset called with:", latMicrodeg, lonMicrodeg);
   return 0;
 }
 
@@ -37,6 +39,7 @@ export function terrainOffset(latMicrodeg, lonMicrodeg) {
  * including optional local terrain adjustments.
  */
 export function isInsideEarth(rUm, latMicrodeg, lonMicrodeg) {
+  console.log("isInsideEarth called with:", rUm, latMicrodeg, lonMicrodeg);
   let surfaceR = earthRadiusAtLat(latMicrodeg);
   surfaceR += terrainOffset(latMicrodeg, lonMicrodeg);
   return rUm <= surfaceR;
@@ -51,6 +54,7 @@ export function isInsideEarth(rUm, latMicrodeg, lonMicrodeg) {
  * @returns {number} linear size in meters
  */
 export function angularResolution(rUm, sigChars = 38) {
+  console.log("angularResolution called with:", rUm, sigChars);
   const rM = rUm * 1e-6;
   const totalBits = sigChars * 5;
   // assume half the bits go to latitude, half to longitude
@@ -66,6 +70,7 @@ export function angularResolution(rUm, sigChars = 38) {
  * @returns {number} number of cubic-equivalent voxels represented
  */
 export function cubicEquivalentVoxelCount(rUm, sigChars = 38) {
+  console.log("cubicEquivalentVoxelCount called with:", rUm, sigChars);
   const angularSize = angularResolution(rUm, sigChars);
   const radialSize = 1e-6; // always 1 µm
   return Math.pow(radialSize / angularSize, 2);

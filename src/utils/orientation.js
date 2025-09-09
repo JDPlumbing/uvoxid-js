@@ -1,7 +1,8 @@
-import { decodeUvoxid } from "../uvoxid.js";
+import { decodeUvoxid } from "../index.js";
 
 /** Compute differences between two UVoxID positions. */
 export function sphericalDelta(uv1, uv2) {
+  console.log("sphericalDelta called with:", uv1, uv2);
   const [r1, lat1, lon1] = decodeUvoxid(uv1);
   const [r2, lat2, lon2] = decodeUvoxid(uv2);
 
