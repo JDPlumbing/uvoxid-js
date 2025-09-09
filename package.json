@@ -1,6 +1,6 @@
 {
   "name": "uvoxid-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Universal Voxel Identifier (JavaScript port of UVoxID)",
   "main": "src/index.js",
   "exports": {
@@ -10,7 +10,13 @@
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
-  "keywords": ["uvoxid", "voxel", "spatial", "coordinates", "encoding"],
+  "keywords": [
+    "uvoxid",
+    "voxel",
+    "spatial",
+    "coordinates",
+    "encoding"
+  ],
   "author": "JD Plumbing",
   "license": "MIT",
   "devDependencies": {
