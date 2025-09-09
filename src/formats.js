@@ -1,5 +1,5 @@
 // src/formats.js
-import * as base32 from "hi-base32"; // lightweight base32 lib
+import { encode as base32Encode, decode as base32Decode } from "hi-base32";
 
 // --- Helpers ---
 function hexToBytes(hex) {
@@ -20,7 +20,7 @@ function bytesToHex(buf) {
 export function uvoxidToBin(uvoxid) {
   console.log("uvoxidToBin called with:", uvoxid);
   let hex = uvoxid.toString(16).padStart(48, "0");
-  return hexToBytes(hex); // returns Uint8Array (24 bytes)
+  return hexToBytes(hex); // Uint8Array (24 bytes)
 }
 
 export function binToUvoxid(buf) {
@@ -50,7 +50,7 @@ export function uvoxidToBase32(uvoxid) {
   let parts = [];
   for (let i = 0; i < 24; i += 8) {
     let chunk = buf.slice(i, i + 8);
-    let enc = base32.encode(new Uint8Array(chunk)).replace(/=+$/, ""); // strip padding
+    let enc = base32Encode(chunk).replace(/=+$/, ""); // strip padding
     parts.push(enc);
   }
   return "uvoxid:" + parts.join("-");
@@ -59,7 +59,7 @@ export function uvoxidToBase32(uvoxid) {
 export function base32ToUvoxid(str) {
   console.log("base32ToUvoxid called with:", str);
   let clean = str.replace(/^uvoxid:/, "").replace(/-/g, "");
-  let bytes = base32.decode.asBytes(clean.toUpperCase());
+  let bytes = base32Decode.asBytes(clean.toUpperCase());
   return binToUvoxid(new Uint8Array(bytes));
 }
 
@@ -67,12 +67,12 @@ export function base32ToUvoxid(str) {
 export function uvoxidToBase32Flat(uvoxid) {
   console.log("uvoxidToBase32Flat called with:", uvoxid);
   let buf = uvoxidToBin(uvoxid);
-  return base32.encode(buf).replace(/=+$/, "");
+  return base32Encode(buf).replace(/=+$/, "");
 }
 
 export function base32FlatToUvoxid(str) {
   console.log("base32FlatToUvoxid called with:", str);
-  let bytes = base32.decode.asBytes(str.toUpperCase());
+  let bytes = base32Decode.asBytes(str.toUpperCase());
   return binToUvoxid(new Uint8Array(bytes));
 }
 
