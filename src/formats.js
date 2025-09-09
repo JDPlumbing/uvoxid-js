@@ -1,5 +1,6 @@
 // src/formats.js
-import { encode as base32Encode, decode as base32Decode } from "hi-base32";
+import base32 from "hi-base32";
+const { encode: base32Encode, decode: base32Decode } = base32;
 
 // --- Helpers ---
 function hexToBytes(hex) {
@@ -20,7 +21,7 @@ function bytesToHex(buf) {
 export function uvoxidToBin(uvoxid) {
   console.log("uvoxidToBin called with:", uvoxid);
   let hex = uvoxid.toString(16).padStart(48, "0");
-  return hexToBytes(hex); // Uint8Array (24 bytes)
+  return hexToBytes(hex);
 }
 
 export function binToUvoxid(buf) {
@@ -50,7 +51,7 @@ export function uvoxidToBase32(uvoxid) {
   let parts = [];
   for (let i = 0; i < 24; i += 8) {
     let chunk = buf.slice(i, i + 8);
-    let enc = base32Encode(chunk).replace(/=+$/, ""); // strip padding
+    let enc = base32Encode(chunk).replace(/=+$/, "");
     parts.push(enc);
   }
   return "uvoxid:" + parts.join("-");
