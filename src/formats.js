@@ -1,5 +1,5 @@
 // src/formats.js
-import base32 from "hi-base32"; // lightweight base32 lib
+import * as base32 from "hi-base32"; // lightweight base32 lib
 
 // --- Helpers ---
 function hexToBytes(hex) {
